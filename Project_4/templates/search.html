@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block body %}
+<style>
+  a {
+    text-decoration: none;
+  }
+</style>
+{% if searched %}
+<div class="row tm-row">
+  {% for blog in blogs %}
+  <article class="col-12 col-md-6 tm-post">
+    <hr class="tm-hr-primary">
+    <a href="{% url 'comment_blogs' blog.slug %}" class="effect-lily tm-post-link tm-pt-60">
+      <div class="tm-post-link-inner">
+        <img src="/media/{{blog.image}}" alt="Image" class="card-img-top" height="250px">
+      </div>
+      <span class="position-absolute tm-new-badge">New</span>
+      <h2 class="tm-pt-30 tm-color-primary tm-post-title">{{ blog.title|truncatechars:30}}</h2>
+    </a>
+    <p class="tm-pt-30">
+      {{blog.content|truncatechars:100}}
+    </p>
+    <div class="d-flex justify-content-between tm-pt-45">
+      <span class="tm-color-primary">Travel . Events</span>
+      <span class="tm-color-primary">{{blog.dateTime}}</span>
+    </div>
+    <hr>
+    <div class="d-flex justify-content-between" style="margin-left: 40%;">
+      <span>{{comments.count}}</span>
+      <a href="/edit_blog/{{blog.slug}}"><button type="button" class="btn btn-outline-success"
+          style="border-radius: 10px;">Update</button></a>
+      <a href="{% url 'delete_blog_post' blog.id %}"><button type="button" class="btn btn-outline-danger"
+          style="border-radius: 10px;">Delete</button></a>
+    </div>
+  </article>
+  {% endfor %}
+</div>
+{% else %}
+<h1>Không Tìm Thấy Kết Quả !!!</h1>
+{% endif %}
+{% endblock %}

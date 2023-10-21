@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block body %}
+<!DOCTYPE html>
+<html>
+<head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+.card {
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  max-width: 452px;
+  margin: auto;
+  text-align: center;
+  font-family: arial;
+  margin-top: -78px;
+}
+
+.title {
+  color: grey;
+  font-size: 18px;
+}
+
+button {
+  border: none;
+  outline: 0;
+  display: inline-block;
+  padding: 8px;
+  color: white;
+  background-color: #000;
+  text-align: center;
+  cursor: pointer;
+  width: 100%;
+  font-size: 18px;
+}
+
+a {
+  text-decoration: none;
+  font-size: 22px;
+  color: black;
+}
+
+button:hover, a:hover {
+  opacity: 0.7;
+}
+</style>
+</head>
+<body>
+<div class="card">
+    {% if user.profile.image %}
+  <img src="{{user.profile.image.url}}" alt="John" style="width:100%">
+    {% endif %}
+  <h1>{{user}}</h1>
+  <p class="title">{{user.get_full_name}}</p>
+  <p>{{user.email}}</p>
+  <!-- {% if user.profile.phone_no %} -->
+  <p>{{user.profile.phone_no}}</p>
+  <!-- {% endif %} -->
+  <!-- {% if user.profile.bio %} -->
+  <p>{{user.profile.bio}}</p>  
+  <!-- {% endif %} -->
+  <!-- <p><a href="{{user.profile.linkedin}}">{{user.profile.linkedin}}</a></p>
+  <p><a href="{{user.profile.instagram}}">{{user.profile.instagram}}</a></p>
+  <p><a href="{{user.profile.facebook}}">{{user.profile.facebook}}</a></p> -->
+  <div style="margin: 24px 0;">
+    {% if user.profile.instagram %}
+    <a href="#"><p><a href="{{user.profile.instagram}}"><i class="fa fa-instagram"></i>  {{user.profile.instagram}}</a></p></a> 
+    {% endif %} 
+    {% if user.profile.linkedin %}
+    <a href="#"><p><a href="{{user.profile.linkedin}}"><i class="fa fa-linkedin"></i>   {{user.profile.linkedin}}</a></p></a>  
+    {% endif %}
+    {% if user.profile.facebook%}
+    <a href="#"><p><a href="{{user.profile.facebook}}"> <i class="fa fa-facebook"> </i>   {{user.profile.facebook}}</a></p></a> 
+    {% endif %}
+  </div>
+  <a href="/edit_profile/" class="btn btn-secondary">Edit Profile</a>
+</div>
+</body>
+</html>
+{% endblock %}
+

@@ -1,0 +1,119 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block body %}
+<style>
+    a {
+        text-decoration: none;
+    }
+</style>
+<div class="row tm-row">
+    <div class="col-12">
+        <form method="GET" class="form-inline tm-mb-80 tm-search-form"action="/search/"> 
+            {% csrf_token %}
+            <input class="form-control tm-search-input"  name="searched" type="text" placeholder="Search..."
+                aria-label="Search">
+            <button href="/search/" class="tm-search-button" type="submit" >
+                <i class="fas fa-search tm-search-icon" aria-hidden="true"></i>
+            </button>
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-12">
+        <hr class="tm-hr-primary tm-mb-55">
+        <!-- Video player 1422x800 -->
+        <img src="/media/{{post.image}}" alt="" style="    height: 866px;
+        width: 925px;" controls class="tm-mb-40">
+        <div class="mb-4">
+            <h2 class="pt-2 tm-color-primary tm-post-title">{{post.title}}</h2>
+            <p class="tm-mb-40">June 16, 2020 posted by Admin Nat</p>
+            <p>{{post.content}} </p>
+            <p>{{post.dateTime}}.</p>
+        </div>
+        <div class="row tm-row">
+            {% for rd in random %}
+            <article class="col-12 col-md-6 tm-post">
+                <hr class="tm-hr-primary">
+                <a href="{% url 'comment_blogs' rd.slug %}" class="effect-lily tm-post-link tm-pt-60">
+                    <div class="tm-post-link-inner">
+                        <img src="/media/{{rd.image}}" alt="Image" class="card-img-top" height="250px">
+                    </div>
+                    <span class="position-absolute tm-new-badge">New</span>
+                    <h2 class="tm-pt-30 tm-color-primary tm-post-title">{{ rd.title|truncatechars:30}}</h2>
+                </a>
+                <p class="tm-pt-30">
+                    {{rd.content|truncatechars:100}}
+                </p>
+                <div class="d-flex justify-content-between tm-pt-45">
+                    <span class="tm-color-primary">Travel . Events</span>
+                    <span class="tm-color-primary">{{rd.dateTime}}</span>
+                </div>
+                <hr>
+                {% if user.is_superuser %}
+                <div class="d-flex justify-content-between" style="margin-left: 40%;">
+                    <span>{{comments.count}}</span>
+                    <a href="/edit_blog/{{rd.slug}}"><button type="button" class="btn btn-outline-success"
+                            style="border-radius: 10px;">Update</button></a>
+                    <a href="{% url 'delete_blog_post' rd.id %}"><button type="button"
+                            class="btn btn-outline-danger" style="border-radius: 10px;">Delete</button></a>
+                </div>
+                {% endif %}
+            </article>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="col-lg-8 tm-post-col">
+        <div class="tm-post-full">
+
+           
+            <!-- Comments -->
+            {% if user.is_authenticated %}
+            <div class="container">
+                <h2>Add Comments Here</h2>
+                <form action="/blog/{{post.slug}}/" method="POST"> {% csrf_token %}
+                    <div class="form-floating">
+                        <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2"
+                            style="height: 100px" id="content" name="content"></textarea>
+                        <label for="floatingTextarea2">Để lại bình luận...</label>
+                        <br>
+                        <button type="submit" class="btn btn-primary">Comment</button>
+                    </div>
+                </form>
+                {% else %}
+                <div class="container">
+                    <!-- <h4><a href="/login/">Login</a> to post comments below.</h4> -->
+                    <a href="/login/"><button type="button" class="btn btn-outline-success"
+                        style="border-radius: 10px;">Login</button></a>
+                        <p>Vui lòng đăng nhập!!</p>
+                    {% endif %}
+                    <br>
+                    <h2>All Comments ({{comments.count}})</h2>
+                    <br>
+                    {% for comment in comments %}
+                    <div class="card">
+                        <div class="card-header">
+                            
+                            
+                            <span style="font-size: 15px;"><b>{{comment.user}}</b></span>
+                            <span style="font-size: 12px;">{{comment.dataTime}}</span>
+                            <a href="{% url 'delete_comment' comment.id %}"
+                            style="margin-left: 288px;"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="card-text">{{comment.content}}
+                                <a href=""
+                            style="margin-left: 443px;"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>
+                            </h6>
+                           
+                        </div>
+                    </div>
+                    <br>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
